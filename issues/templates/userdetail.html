@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>{{ user.name }}</title>
+    </head>
+    <body>
+        <h1>{{ user.name }}</h1>
+
+        <table id="user-issue-table" class="display">
+            <thead>
+                <tr>
+                    <th>title</th>
+                    <th>details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in issues %}
+                <tr>
+                    <td><a href="/issues/{{ row.issue_id }}">{{ row.title }}</a></td>
+                    <td>{{ row.details_short }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </body>
+</html>

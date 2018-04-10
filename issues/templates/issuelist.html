@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Garden issues</title>
+    </head>
+    <body>
+
+        <table id="issues-table" class="display">
+            <thead>
+                <tr>
+                    <th>title</th>
+                    <th>user</th>
+                    <th>details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in issues %}
+                <tr>
+                    <td>{{ row.title }}</td>
+                    <td>{{ row.user }}</td>
+                    <td>{{ row.details_short }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </body>
+</html>

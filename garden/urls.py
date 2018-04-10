@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from issues.views import (
+    UserListView,
+    UserDetailView,
+    IssueListView,
+    IssueDetailView,
+)
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^users$', UserListView.as_view(), name='users-list'),
+    url(r'^users/(?P<user_id>[0-9]+)$', UserDetailView.as_view(), name='users-detail'),
+    url(r'^issues$', IssueListView.as_view(), name='issues-list'),
+    url(r'^issues/(?P<issue_id>[0-9]+)$', IssueDetailView.as_view(), name='issues-detail'),
 ]

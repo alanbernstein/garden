@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Garden users</title>
+    </head>
+    <body>
+
+        <table id="users-table" class="display">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>issue count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in users %}
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.issue_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </body>
+</html>
