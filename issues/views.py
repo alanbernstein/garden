@@ -4,11 +4,27 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 
+from issues.models import Issue
+
 
 # Create your views here.
 
 class MapView(TemplateView):
     template_name = 'mapbox.html'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(MapView, self).get_context_data(**kwargs)
+        context['issues'] = [{
+            'lon': x.lon,
+            'lat': x.lat,
+            'title': x.title,
+            'details': x.details,
+        } for x in Issue.objects.all()]
+        return context
 
 
 class IndexView(TemplateView):
