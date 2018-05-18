@@ -21,6 +21,7 @@ from issues.views import (
     UserDetailView,
     IssueListView,
     IssueDetailView,
+    MapView,
 )
 
 
@@ -31,4 +32,5 @@ urlpatterns = [
     url(r'^users/(?P<user_id>[0-9]+)$', UserDetailView.as_view(), name='users-detail'),
     url(r'^issues$', IssueListView.as_view(), name='issues-list'),
     url(r'^issues/(?P<issue_id>[0-9]+)$', IssueDetailView.as_view(), name='issues-detail'),
+    url(r'^map$', MapView.as_view(), name='map'),
 ]

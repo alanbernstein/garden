@@ -7,6 +7,10 @@ from django.views.generic.base import TemplateView
 
 # Create your views here.
 
+class MapView(TemplateView):
+    template_name = 'mapbox.html'
+
+
 class IndexView(TemplateView):
     template_name = 'index.html'
 

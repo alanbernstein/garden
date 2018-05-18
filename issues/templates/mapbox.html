@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Garden map</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+        <style>
+         body { margin:0; padding:0; }
+         #map { position:absolute; top:1px; bottom:0; width:100%; }
+         #filter { position:absolute; top:0;}
+         .mapboxgl-popup {
+             max-width: 400px;
+             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+         }
+        </style>
+    </head>
+    <body>
+        <div id='map'></div>
+        <input id="filter" type="text" placeholder="Filter" onkeyup="filter()"><br>
+        <script>
+         mapboxgl.accessToken = 'pk.eyJ1IjoiYWxhbmJlcm5zdGVpbiIsImEiOiJjaXh1amxyZG4wMDZtMzNuemFyOTRsZWJ2In0.3EQRr_SRX4e_CHCheNBiiA';
+         var map = new mapboxgl.Map({
+             container: 'map',
+             zoom: 18,
+             center: [-76.949915, 38.876661],
+             style: 'mapbox://styles/mapbox/satellite-v9',
+             hash: false
+         });
+
+         function filter() {
+             var el = document.getElementById('filter');
+             console.log(el.value);
+         }
+
+         // attempts:
+         // - https://www.mapbox.com/mapbox-gl-js/example/data-driven-circle-colors/
+         // - https://www.mapbox.com/mapbox-gl-js/example/geojson-markers/
+         // success:
+         // - https://www.mapbox.com/mapbox-gl-js/example/popup-on-click/
+         // where icon names can be found:
+         // - https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/satellite-v9/_svg
+         // more icon control:
+         // - https://www.mapbox.com/mapbox-gl-js/example/add-image-generated/
+
+         map.on('load', function () {
+             // Add a layer showing the places.
+             console.log("blah");
+             map.addLayer({
+                 "id": "places",
+                 "type": "symbol",
+                 "source": {
+                     "type": "geojson",
+                     "data": {
+                         "type": "FeatureCollection",
+                         "features": [{
+                             "type": "Feature",
+                             "properties": {
+                                 "description": "<strong>Make it Mount Pleasant</strong><p><a href=\"http://www.mtpleasantdc.com/makeitmtpleasant\" target=\"_blank\" title=\"Opens in a new window\">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>",
+                                 "icon": "embassy"
+                             },
+                             "geometry": {
+                                 "type": "Point",
+                                 "coordinates": [-76.949915+.0003, 38.876661+.0003]
+                             }
+                         }, {
+                             "type": "Feature",
+                             "properties": {
+                                 "description": "<strong>Mad Men Season Five Finale Watch Party</strong><p>Head to Lounge 201 (201 Massachusetts Avenue NE) Sunday for a <a href=\"http://madmens5finale.eventbrite.com/\" target=\"_blank\" title=\"Opens in a new window\">Mad Men Season Five Finale Watch Party</a>, complete with 60s costume contest, Mad Men trivia, and retro food and drink. 8:00-11:00 p.m. $10 general admission, $20 admission and two hour open bar.</p>",
+                                 "icon": "theatre"
+                             },
+                             "geometry": {
+                                 "type": "Point",
+                                 "coordinates": [-76.949915+.0003, 38.876661-.0003]
+                             }
+                         }, {
+                             "type": "Feature",
+                             "properties": {
+                                 "description": "<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href=\"http://tallulaeatbar.ticketleap.com/2012beachblanket/\" target=\"_blank\" title=\"Opens in a new window\">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>",
+                                 "icon": "bar"
+                             },
+                             "geometry": {
+                                 "type": "Point",
+                                 "coordinates": [-76.949915-.0003, 38.876661-.0003]
+                             }
+                         }]
+                     }
+                 },
+                 "layout": {
+                     "icon-image": "{icon}-15",
+                     "icon-allow-overlap": true
+                 }
+             });
+
+             // When a click event occurs on a feature in the places layer, open a popup at the
+             // location of the feature, with description HTML from its properties.
+             map.on('click', 'places', function (e) {
+                 var coordinates = e.features[0].geometry.coordinates.slice();
+                 var description = e.features[0].properties.description;
+
+                 // Ensure that if the map is zoomed out such that multiple
+                 // copies of the feature are visible, the popup appears
+                 // over the copy being pointed to.
+                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                 }
+
+                 new mapboxgl.Popup()
+                             .setLngLat(coordinates)
+                             .setHTML(description)
+                             .addTo(map);
+             });
+
+             // Change the cursor to a pointer when the mouse is over the places layer.
+             map.on('mouseenter', 'places', function () {
+                 map.getCanvas().style.cursor = 'pointer';
+             });
+
+             // Change it back to a pointer when it leaves.
+             map.on('mouseleave', 'places', function () {
+                 map.getCanvas().style.cursor = '';
+             });
+         });
+        </script>
+    </body>
+</html>
