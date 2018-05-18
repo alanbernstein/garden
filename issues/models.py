@@ -14,3 +14,5 @@ class Issue(models.Model):
     title = models.CharField(max_length=100)
     details = models.CharField(max_length=1000, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lon = models.FloatField()
+    lat = models.FloatField()
