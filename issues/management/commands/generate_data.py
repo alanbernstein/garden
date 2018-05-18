@@ -50,16 +50,16 @@ class Command(BaseCommand):
     help = 'generate some fake data and insert into database'
 
     def add_arguments(self, parser):
-        parser.add_argument('nuke_db', default=False, type=bool)
-        parser.add_argument('num_issues', default=10, type=int)
-        parser.add_argument('issues_per_user', default=2, type=float)
+        parser.add_argument('--nuke_db', action='store_true')
+        parser.add_argument('--num_issues', default=10, type=int)
+        parser.add_argument('--issues_per_user', default=2, type=float)
 
     def handle(self, *args, **options):
         if options['nuke_db']:
             User.objects.all().delete()
             Issue.objects.all().delete()
 
-        num_users = options['num_issues'] / options['issues_per_user']
+        num_users = int(options['num_issues'] / options['issues_per_user'])
 
         for n in range(num_users):
             User.objects.create(name='pubert')
@@ -75,4 +75,4 @@ class Command(BaseCommand):
                 lat=lat,
             )
 
-        self.stdout.write(self.style.SUCCESS('generated %d fake issues' % options['num_issues']))
+        self.stdout.write('generated %d fake issues' % options['num_issues'])
